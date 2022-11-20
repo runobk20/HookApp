@@ -1,54 +1,9 @@
-import { useEffect, useReducer } from "react"
-import { TodoList, AddTodo, todoReducer } from "./"
-import { TodoHelper } from "../Helpers/Todo"
-
-
-const initialState = [
-    {
-        id: 1,
-        description: 'Start adding task in the right menu',
-        done: false
-    },
-];
-
-const reduceInit = () => {
-    return JSON.parse(localStorage.getItem('todos')) || initialState;
-}
+import { useTodo } from "../hooks/useTodo"
+import { TodoList, AddTodo} from "./"
 
 export const TodoApp = () => {
 
-    const [todos, dispatch] = useReducer( todoReducer, initialState, reduceInit);
-
-    const addTodoHandler = (value) => {
-        const newTodo = new TodoHelper(value).create();
-        const action = {
-            type: 'Add Todo',
-            payload: newTodo
-        }
-        dispatch(action);
-    }
-
-    const deleteTodoHandler = (todoId) => {
-        const action = {
-            type: 'Delete Todo',
-            payload: todoId
-        }
-
-        dispatch(action);
-    }
-  
-    const todoStatusHandler = (todoId) => {
-        const action = {
-            type: 'Todo Status',
-            payload: todoId
-        }
-
-        dispatch(action);
-    }
-
-    useEffect(() => {
-        localStorage.setItem('todos', JSON.stringify(todos));
-    }, [todos])
+    const { todos, addTodoHandler, deleteTodoHandler, todoStatusHandler } = useTodo();
 
     return (
         <div className="m-4">
